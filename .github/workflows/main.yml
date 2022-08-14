@@ -37,7 +37,7 @@ jobs:
       run: golint ./...
       
   build-and-deploy:
-    runs-on: ubuntu latest
+    runs-on: ubuntu-latest
     
     steps:
     - uses: actions/ckeckout@v3
