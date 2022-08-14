@@ -37,8 +37,9 @@ jobs:
       run: golint ./...
   build-and-deploy:
     name: deploy to acr
-    runs-on: [self-hosted, linux]
+    runs-on: ubuntu latest
     steps:
+    - uses: actions/ckeckout@v3
     -  name: azure login
        run: |
          az login --service-principal -u $AZURE_CLIENT_ID -p $AZURE_CLIENT_SECRET --tenant $AZURE_TENANT_ID
