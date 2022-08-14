@@ -39,25 +39,25 @@ jobs:
     runs-on: ubuntu-latest
     needs: build
     steps:
-     - uses: actions/ckeckout@v3
-     - name: azure login
-       run: |
+    - uses: actions/ckeckout@v3
+    - name: azure login
+      run: |
           az login --service-principal -u $AZURE_CLIENT_ID -p $AZURE_CLIENT_SECRET --tenant $AZURE_TENANT_ID
           az account list
-     - name: 'Build and push image'
-       uses: azure/docker-login@v1
-       with:
+    - name: 'Build and push image'
+      uses: azure/docker-login@v1
+      with:
            login-server: ${{ secrets.REGISTRY_LOGIN_SERVER }}
            username: ${{ secrets.REGISTRY_USERNAME }}
            password: ${{ secrets.REGISTRY_PASSWORD }}
-     - name: image build
-     - run: |
+    - name: image build
+    - run: |
            docker build . /myapp/Dockerfile ${{ secrets.REGISTRY_LOGIN_SERVER }}/myimage:${{ github.sha }} .
            docker push ${{ secrets.REGISTRY_LOGIN_SERVER }}/myimage:${{ github.sha }}
 
-     - name: 'Deploy to Azure Container Instances'
-       uses: 'azure/aci-deploy@v1'
-       with:
+    - name: 'Deploy to Azure Container Instances'
+      uses: 'azure/aci-deploy@v1'
+      with:
            resource-group: ${{ secrets.RESOURCE_GROUP }}
            dns-name-label: ${{ secrets.RESOURCE_GROUP }}${{ github.run_number }}
            image: ${{ secrets.REGISTRY_LOGIN_SERVER }}/myimage:${{ github.sha }}
