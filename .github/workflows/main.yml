@@ -37,40 +37,39 @@ jobs:
       run: golint ./...
       
   deploy:
-    runs-on: ubuntu-latest
+   - uses: build
+     steps:
+     - uses: actions/ckeckout@v3
     
-    steps:
-    - uses: actions/ckeckout@v3
-    
-    -  name: azure login
-       run: |
-         az login --service-principal -u $AZURE_CLIENT_ID -p $AZURE_CLIENT_SECRET --tenant $AZURE_TENANT_ID
-         az account list
-       env: 
-        credentials: ${{ secrets.AZURE_CREDENTIALS }}
-        AZURE_CLIENT_ID: ${{ fromJSON(secrets.AZURE_CREDENTIALS)['clientId'] }}
-        AZURE_CLIENT_SECRET: ${{ fromJSON(secrets.AZURE_CREDENTIALS)['clientSecret'] }}
-        AZURE_TENANT_ID: ${{ fromJSON(secrets.AZURE_CREDENTIALS)['tenantId'] }}
-    -  name: 'Build and push image'
-       uses: azure/docker-login@v1
-       with:
-          login-server: ${{ secrets.REGISTRY_LOGIN_SERVER }}
-          username: ${{ secrets.REGISTRY_USERNAME }}
-          password: ${{ secrets.REGISTRY_PASSWORD }}
-    - name: image build
-    -  run: |
-          docker build . /myapp/Dockerfile ${{ secrets.REGISTRY_LOGIN_SERVER }}/myimage:${{ github.sha }} .
-          docker push ${{ secrets.REGISTRY_LOGIN_SERVER }}/myimage:${{ github.sha }}
+     -  name: azure login
+        run: |
+          az login --service-principal -u $AZURE_CLIENT_ID -p $AZURE_CLIENT_SECRET --tenant $AZURE_TENANT_ID
+          az account list
+        env: 
+         credentials: ${{ secrets.AZURE_CREDENTIALS }}
+         AZURE_CLIENT_ID: ${{ fromJSON(secrets.AZURE_CREDENTIALS)['clientId'] }}
+         AZURE_CLIENT_SECRET: ${{ fromJSON(secrets.AZURE_CREDENTIALS)['clientSecret'] }}
+         AZURE_TENANT_ID: ${{ fromJSON(secrets.AZURE_CREDENTIALS)['tenantId'] }}
+     -  name: 'Build and push image'
+        uses: azure/docker-login@v1
+        with:
+           login-server: ${{ secrets.REGISTRY_LOGIN_SERVER }}
+           username: ${{ secrets.REGISTRY_USERNAME }}
+           password: ${{ secrets.REGISTRY_PASSWORD }}
+     - name: image build
+     -  run: |
+           docker build . /myapp/Dockerfile ${{ secrets.REGISTRY_LOGIN_SERVER }}/myimage:${{ github.sha }} .
+           docker push ${{ secrets.REGISTRY_LOGIN_SERVER }}/myimage:${{ github.sha }}
 
-    -  name: 'Deploy to Azure Container Instances'
-       uses: 'azure/aci-deploy@v1'
-       with:
-          resource-group: ${{ secrets.RESOURCE_GROUP }}
-          dns-name-label: ${{ secrets.RESOURCE_GROUP }}${{ github.run_number }}
-          image: ${{ secrets.REGISTRY_LOGIN_SERVER }}/myimage:${{ github.sha }}
-          registry-login-server: ${{ secrets.REGISTRY_LOGIN_SERVER }}
-          registry-username: ${{ secrets.REGISTRY_USERNAME }}
-          registry-password: ${{ secrets.REGISTRY_PASSWORD }}
-          name: aci-myimage
-          location: 'east us'
+     -  name: 'Deploy to Azure Container Instances'
+        uses: 'azure/aci-deploy@v1'
+        with:
+           resource-group: ${{ secrets.RESOURCE_GROUP }}
+           dns-name-label: ${{ secrets.RESOURCE_GROUP }}${{ github.run_number }}
+           image: ${{ secrets.REGISTRY_LOGIN_SERVER }}/myimage:${{ github.sha }}
+           registry-login-server: ${{ secrets.REGISTRY_LOGIN_SERVER }}
+           registry-username: ${{ secrets.REGISTRY_USERNAME }}
+           registry-password: ${{ secrets.REGISTRY_PASSWORD }}
+           name: aci-myimage
+           location: 'east us'
         
