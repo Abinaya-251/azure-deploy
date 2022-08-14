@@ -8,6 +8,7 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
+    - uses: actions/checkout@v2
     - name: chechout code into go module directory 
       uses: actions/checkout@v2
     - name: Set up Go
