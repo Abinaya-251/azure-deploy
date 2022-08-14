@@ -40,10 +40,7 @@ jobs:
     runs-on: [self-hosted, linux]
     steps:
     -  name: azure login
-    -  uses: azure/CLI@v1
-       with:
-       azcliversion: 2.0.72
-       inlineScript: |
+       run: |
          az login --service-principal -u $AZURE_CLIENT_ID -p $AZURE_CLIENT_SECRET --tenant $AZURE_TENANT_ID
          az account list
        env: 
@@ -57,6 +54,7 @@ jobs:
           login-server: ${{ secrets.REGISTRY_LOGIN_SERVER }}
           username: ${{ secrets.REGISTRY_USERNAME }}
           password: ${{ secrets.REGISTRY_PASSWORD }}
+    - name: image build
     -  run: |
           docker build . /myapp/Dockerfile ${{ secrets.REGISTRY_LOGIN_SERVER }}/myimage:${{ github.sha }} .
           docker push ${{ secrets.REGISTRY_LOGIN_SERVER }}/myimage:${{ github.sha }}
