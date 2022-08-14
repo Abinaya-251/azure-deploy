@@ -4,7 +4,7 @@ env:
   REGISTRY_NAME: abinaya
   CLUSTER_NAME: MY_KUBE_CLUSTER
   CLUSTER_RESOURCE_GROUP: AKS_RG
-  NAMESPACE: default
+  NAMESPACE: k8sNamespace
 
 jobs:
     build-and-deploy:
