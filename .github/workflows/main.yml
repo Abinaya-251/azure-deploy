@@ -37,8 +37,9 @@ jobs:
       run: golint ./...
       
   deploy:
-   - uses: build
-     steps:
+   runs-on: ubuntu-latest
+   needs: build
+   steps:
      - uses: actions/ckeckout@v3
     
      -  name: azure login
