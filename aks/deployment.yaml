@@ -1,21 +1,21 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: sampleapp
+  name: sampleapp-image
   labels:
-    app: sampleapp
+    app: sampleapp-image
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: sampleapp
+      app: sampleapp-image
   template:
     metadata:
       labels:
-        app: sampleapp
+        app: sampleapp-image
     spec:
       containers:
-      - name: sampleapp
+      - name: sampleapp-image
         image: ${{ secrets.REGISTRY_LOGIN_SERVER }}/sampleapp:latest
         imagePullPolicy: Always
     
