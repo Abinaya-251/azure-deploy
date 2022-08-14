@@ -6,7 +6,7 @@ COPY go.mod .
 RUN go build -o main.go .
 
 FROM debian:buster-slim
-COPY --from=builder /go/src/app/main /go/bin/main
+COPY --from=builder /go/src/app /go/bin/main
 ENV PATH="/go/bin:${PATH}"
 CMD ["main"]
 
