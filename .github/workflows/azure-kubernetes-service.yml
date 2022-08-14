@@ -1,5 +1,10 @@
 on: [push]
 name: Linux_Container_Workflow
+env:
+  REGISTRY_NAME: abinaya
+  CLUSTER_NAME: MY_KUBE_CLUSTER
+  CLUSTER_RESOURCE_GROUP: AKS_RG
+  NAMESPACE: default
 
 jobs:
     build-and-deploy:
@@ -23,15 +28,31 @@ jobs:
         - run: |
             docker build --file ./Dockerfile -t ${{ secrets.REGISTRY_LOGIN_SERVER }}/sampleapp:latest .
             docker push ${{ secrets.REGISTRY_LOGIN_SERVER }}/sampleapp:latest
-
-        - name: 'Deploy to Azure Container Instances'
-          uses: 'azure/aci-deploy@v1'
+        - uses: azure/aks-set-context@v1
           with:
-            resource-group: ${{ secrets.RESOURCE_GROUP }}
-            dns-name-label: ${{ secrets.RESOURCE_GROUP }}${{ github.run_number }}
-            image: ${{ secrets.REGISTRY_LOGIN_SERVER }}/sampleapp:${{ github.sha }}
-            registry-login-server: ${{ secrets.REGISTRY_LOGIN_SERVER }}
-            registry-username: ${{ secrets.REGISTRY_USERNAME }}
-            registry-password: ${{ secrets.REGISTRY_PASSWORD }}
-            name: aci-sampleapp
-            location: 'east us'
+            creds: '${{ secrets.AZURE_CREDENTIALS }}'
+            cluster-name: ${{ env.CLUSTER_NAME }}
+            resource-group: ${{ env.CLUSTER_RESOURCE_GROUP }}
+    
+        - run: |
+            kubectl create namespace ${{ env.NAMESPACE }} --dry-run -o json | kubectl apply -f -
+        - uses: azure/k8s-create-secret@v1
+          with:
+            container-registry-url: ${{ env.REGISTRY_NAME }}.azurecr.io
+            container-registry-username: ${{ secrets.REGISTRY_USERNAME }}
+            container-registry-password: ${{ secrets.REGISTRY_PASSWORD }}
+            secret-name: ${{ env.REGISTRY_NAME }}-registry-connection
+            namespace: ${{ env.NAMESPACE }}
+    
+        - uses: azure/k8s-deploy@v1
+          with:
+           manifests: |
+             aks/deployment.yaml
+             aks/service.yaml
+           images: |
+             ${{ env.REGISTRY_NAME }}.azurecr.io/myimage:latest
+           imagepullsecrets: |
+             ${{ env.REGISTRY_NAME }}-registry-connection
+           namespace: ${{ env.NAMESPACE }}
+
+
