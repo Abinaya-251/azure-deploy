@@ -55,7 +55,7 @@ jobs:
     -  name: install az-cli
        run: |
         sudo apt-get update
-        sudo apt-get install azure-cli=2.39.0-1~bullseye
+        sudo apt-get install azure-cli
     - name: Azure login
       uses: azure/login@v1.4.3
       with:
