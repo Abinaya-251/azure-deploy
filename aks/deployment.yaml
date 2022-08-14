@@ -15,7 +15,7 @@ spec:
         app: sampleapp-image
     spec:
       containers:
-      - name: sampleapp-image
+      - name: sampleapp-image-cont
         image: abinaya.azurecr.io/sampleapp:latest
         imagePullPolicy: Always
         ports:
