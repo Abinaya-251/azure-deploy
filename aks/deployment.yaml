@@ -3,16 +3,16 @@ kind: Deployment
 metadata:
   name: sampleapp
   labels:
-    app: sampleapp-image
+    app: sampleapp
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: sampleapp-image
+      app: sampleapp
   template:
     metadata:
       labels:
-        app: sampleapp-image
+        app: sampleapp
     spec:
       containers:
       - name: sampleapp
