@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: sampleapp-image
-        image: ${{ secrets.REGISTRY_LOGIN_SERVER }}/sampleapp:latest
+        image: abinaya.azurecr.io/sampleapp:latest
         imagePullPolicy: Always
         ports:
         - containerPort: 8080
