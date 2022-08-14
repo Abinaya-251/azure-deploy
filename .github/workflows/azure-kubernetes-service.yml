@@ -1,5 +1,5 @@
 on: [push]
-name: Linux_Container_Workflow
+name: build to acr and deploy to aks
 env:
   REGISTRY_NAME: abinaya
   CLUSTER_NAME: MY_KUBE_CLUSTER
