@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: sampleapp-image
+  name: sampleapp-image-deployment
   labels:
     app: sampleapp-image
 spec:
