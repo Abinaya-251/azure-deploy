@@ -4,7 +4,7 @@ metadata:
   name: sampleapp
 spec:
   selector:
-    app: sampleapp-image
+    app: sampleapp
   ports:
     - protocol: TCP
       port: 80
