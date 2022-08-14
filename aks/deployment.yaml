@@ -18,4 +18,5 @@ spec:
       - name: sampleapp-image
         image: ${{ secrets.REGISTRY_LOGIN_SERVER }}/sampleapp:latest
         imagePullPolicy: Always
-    
+        ports:
+        - containerPort: 8080
