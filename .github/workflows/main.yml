@@ -36,7 +36,7 @@ jobs:
     - name: Run golint
       run: golint ./...
       
-  build-and-deploy:
+  deploy:
     runs-on: ubuntu-latest
     
     steps:
