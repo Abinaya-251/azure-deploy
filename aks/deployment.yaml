@@ -15,7 +15,7 @@ spec:
         app: sampleapp-image
     spec:
       containers:
-      - name: sampleapp-image
+      - name: sampleapp
         image: ${{ secrets.REGISTRY_LOGIN_SERVER }}/sampleapp:latest
         imagePullPolicy: Always
     
