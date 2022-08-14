@@ -57,7 +57,7 @@ jobs:
         sudo apt-get update
         sudo apt-get install azure-cli
     - name: Azure login
-      uses: azure/login@v1.4.3
+      uses: Azure/actions/login@V1
       with:
         client-id: bf3c2786-f8d6-476e-be8b-3da3217ea1ec
         tenant-id: 1a11d0e6-5eca-40e5-be75-c6e47e61a910
