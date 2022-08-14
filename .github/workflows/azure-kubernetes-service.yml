@@ -51,6 +51,7 @@ jobs:
              aks/service.yaml
            images: |
              ${{ env.REGISTRY_NAME }}.azurecr.io/myimage:latest
+             imagePullPolicy: Always
            imagepullsecrets: |
              ${{ env.REGISTRY_NAME }}-registry-connection
            namespace: ${{ env.NAMESPACE }}
